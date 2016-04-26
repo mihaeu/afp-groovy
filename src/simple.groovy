@@ -15,8 +15,8 @@ def y = dvar 'y'
 maximize x + y
 
 constraints ([
-	constant(2).eq(constant(2)),
-	constant(2).eq(constant(3))
+	(2.const * x + y + 10.const).leq(20.const),
+	(x + 3.const * y).geq(10.const)
 ])
 
 assign ([

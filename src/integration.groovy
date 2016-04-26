@@ -12,6 +12,10 @@ def constants = { Map m -> solver.constants m.values() as double[] }
 
 def variables = { String[] args -> solver.variables(args) }
 
+Number.metaClass.getConst = { ->
+	solver.constant(delegate)
+}
+
 def binding = new Binding([
 	solver: solver,
 	dvar: solver.&variable,
