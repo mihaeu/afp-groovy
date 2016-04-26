@@ -36,7 +36,7 @@ public class ExprList extends ArrayList<Expression> {
 	}
 	
 	public Expression sum(Function<Expression,Expression> f) {
-		return map(f).reduce((x,y) -> x.sum(y));
+		return map(f).reduce(Expression::sum);
 	}
 	
 	public Expression sum() {
@@ -44,7 +44,7 @@ public class ExprList extends ArrayList<Expression> {
 	}
 	
 	public Expression prod(Function<Expression,Expression> f) {
-		return map(f).reduce((x,y) -> x.prod(y));
+		return map(f).reduce(Expression::prod);
 	}
 	
 	public Expression prod() {
@@ -52,7 +52,7 @@ public class ExprList extends ArrayList<Expression> {
 	}
 	
 	public Expression sumProd(ExprList that) {
-		return zip(that,(x,y) -> x.prod(y)).sum();
+		return zip(that, Expression::prod).sum();
 	}
 	
 	public ExprList zip(ExprList that, ZipFunction f) {
