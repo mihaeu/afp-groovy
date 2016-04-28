@@ -2,6 +2,7 @@ package optim;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Solver {
 	
@@ -25,7 +26,11 @@ public class Solver {
 			list.add(variable(prefix+i));
 		return list;
 	}
-	
+
+	public ExprList variables(List<String> names) {
+		return variables(names.toArray(new String[names.size()]));
+	}
+
 	public ExprList variables(String[] names) {
 		ExprList list = new ExprList(names.length);
 		for (int i=0; i<names.length; i++)
@@ -50,7 +55,14 @@ public class Solver {
 			list.add(constant(value));
 		return list;
 	}
-	
+
+	public ExprList constants(List<Integer> values) {
+		ExprList list = new ExprList(values.size());
+		for (Integer i : values)
+			list.add(constant(i.doubleValue()));
+		return list;
+	}
+
 	public ExprList constants(double[] values) {
 		ExprList list = new ExprList(values.length);
 		for (int i=0; i<values.length; i++)

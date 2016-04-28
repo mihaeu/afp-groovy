@@ -8,8 +8,6 @@ def assignment = new Assignment()
 def constraints = { args -> args.each { solver.add it } }
 def assign = { args -> args.each { String k, Double v -> assignment.put(k, v)} }
 def constant = { Double d -> solver.constant(d) }
-def constants = { Map m -> solver.constants m.values() as double[] }
-def variables = { String[] args -> solver.variables(args) }
 
 Number.metaClass.getConst = { ->
 	solver.constant(delegate as double)
@@ -18,13 +16,13 @@ Number.metaClass.getConst = { ->
 def binding = new Binding([
 	solver: solver,
 	dvar: solver.&variable,
-	run: solver.&variables,
+	variables: solver.&variables,
 	maximize: solver.&maximize,
 	minimize: solver.&minimize,
-	constant: constant,
-	constants: constants,
-	variables: variables,
+	constant: solver.&constant,
+	constants: solver.&constants,
 	eq: solver.&equals,
+	constraint: solver.&add,
 	constraints: constraints,
 	assign: assign
 ])
@@ -34,12 +32,6 @@ def binding = new Binding([
 //def shell = new GroovyShell(this.class.classLoader, binding, conf)
 
 def shell = new GroovyShell(binding)
-shell.evaluate(new File('src/simple.groovy'))
-solver.solve(assignment)
-
-// reset globals
-solver = new Solver()
-assignment = new Assignment()
-
+//shell.evaluate(new File('src/simple.groovy'))
 shell.evaluate(new File('src/oil.groovy'))
 solver.solve(assignment)

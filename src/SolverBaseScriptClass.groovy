@@ -6,7 +6,7 @@ abstract class SolverBaseScriptClass extends Script {
 		solver.variable name
 	}
 
-	void maximise(Expression expression) {
+	void maximize(Expression expression) {
 		def solver = this.binding.solver
 		solver.maximize expression
 	}

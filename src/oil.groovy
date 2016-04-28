@@ -18,18 +18,28 @@ constraints {
 }
 */
 
-def rawMaterial 			= 205
-def products 				= ['light', 'medium', 'heavy']
-def demand					= [light: 59, medium: 12, heavy: 13]
-def processes				= ["1", "2"] as String[]
-def production				= [light: [1: 12, 2: 16], medium: [1: 1, 2: 7], heavy: [1: 4, 2: 2]]
-def consumption				= [1: 25, 2: 30]
-def cost					= [1: 300, 2: 400]
+def rawMaterial 	= 205
+def products 		= ["light","medium","heavy"]
+def demand 			= [59,12,13]
+def processes 		= ["p1","p2"]
+def production 		= [[12,16],[1,7],[4,2]]
+def consumption 	= [25,30]
+def cost 			= [300,400]
 
-//minimize processes sum { cost.it * processes.it }
+def run = variables processes
+minimize run.sumProd(constants(cost))
 
-def run = variables(processes)
-constraints([
-	constants(consumption).sumProd().leq(constant(rawMaterial)),
-	products.each {}
+constraint run.sumProd(constants(consumption)).leq(rawMaterial.const)
+
+products.indices.each { q ->
+	def x = 0.const
+	processes.indices.each { p ->
+		x = x + run.get(p) * production[q][p].const
+	}
+	constraint x.geq(demand[q].const)
+}
+
+assign ([
+	p1: 2.25,
+	p2: 2.0
 ])
