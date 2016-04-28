@@ -7,11 +7,8 @@ def assignment = new Assignment()
 
 def constraints = { args -> args.each { solver.add it } }
 def assign = { args -> args.each { String k, Double v -> assignment.put(k, v)} }
-def constant = { Double d -> solver.constant(d) }
 
-Number.metaClass.getConst = { ->
-	solver.constant(delegate as double)
-}
+Number.metaClass.getConst = { solver.constant(delegate as double) }
 
 def binding = new Binding([
 	solver: solver,
@@ -21,7 +18,6 @@ def binding = new Binding([
 	minimize: solver.&minimize,
 	constant: solver.&constant,
 	constants: solver.&constants,
-	eq: solver.&equals,
 	constraint: solver.&add,
 	constraints: constraints,
 	assign: assign
