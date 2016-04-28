@@ -1,4 +1,4 @@
-package optim
+import optim.Expression
 
 abstract class SolverBaseScriptClass extends Script {
 	void dvar(String name) {
