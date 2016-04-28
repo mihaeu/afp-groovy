@@ -1,19 +1,18 @@
 import optim.Assignment
 import optim.Solver
 
+// globals (not really, only accessible from this script)
 def solver = new Solver();
-def constraints = { args -> args.each { solver.add it } }
-
 def assignment = new Assignment()
-def assign = { args -> args.each { String k, Double v -> assignment.put(k, v)} }
 
+def constraints = { args -> args.each { solver.add it } }
+def assign = { args -> args.each { String k, Double v -> assignment.put(k, v)} }
 def constant = { Double d -> solver.constant(d) }
 def constants = { Map m -> solver.constants m.values() as double[] }
-
 def variables = { String[] args -> solver.variables(args) }
 
 Number.metaClass.getConst = { ->
-	solver.constant(delegate)
+	solver.constant(delegate as double)
 }
 
 def binding = new Binding([
@@ -36,6 +35,11 @@ def binding = new Binding([
 
 def shell = new GroovyShell(binding)
 shell.evaluate(new File('src/simple.groovy'))
-shell.evaluate(new File('src/oil.groovy'))
+solver.solve(assignment)
 
+// reset globals
+solver = new Solver()
+assignment = new Assignment()
+
+shell.evaluate(new File('src/oil.groovy'))
 solver.solve(assignment)
