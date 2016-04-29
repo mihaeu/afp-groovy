@@ -27,6 +27,7 @@ def consumption 	= [25,30]
 def cost 			= [300,400]
 
 def run = variables processes
+
 minimize run.sumProd(constants(cost))
 
 constraint run.sumProd(constants(consumption)).leq(rawMaterial.const)

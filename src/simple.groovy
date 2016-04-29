@@ -12,6 +12,7 @@ constraints {
 
 def x = dvar 'x'
 def y = dvar 'y'
+
 maximize x + y
 
 constraints ([
